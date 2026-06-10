@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<!--
+  Standalone accessibility test harness — Candidate Selection screen.
+  Loads the REAL votrite-a11y.css / votrite-a11y.js plus the base
+  components.css (with its visibility:hidden rule) over a faithful, static
+  copy of resources/views/client/race.blade.php (non-ranked race) so the
+  keyboard + screen-reader behaviour can be tested without PHP/DB/API.
+  Open directly in a browser (file://) or serve the app root statically.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Harness — Candidate Selection</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../public/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="../public/assets/css/components.css" rel="stylesheet" type="text/css"/>
+<link href="../public/assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
+<link href="../public/assets/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css"/>
+<link href="../public/assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../public/assets/css/votrite-a11y.css" rel="stylesheet" type="text/css"/>
+<style> body { background:#e0e5ec; } .harness-note{background:#fff8c5;padding:8px 14px;font-size:13px;border-bottom:1px solid #e3c200;} </style>
+</head>
+<body class="page-header-fixed">
+<div class="harness-note">Test harness — Candidate Selection. Try: Tab, ↑/↓, F (select), K (deselect), S (read selection), L (read instructions), J (next), D (back), Esc.</div>
+
+<div class="page-header-voter -i navbar navbar-fixed-top" style="position:static;">
+    <div class="page-header-inner row">
+        <div class="voter-title col-md-6 col-xs-12 text-center">
+            <h2>City Board of Elections</h2>
+            <h4>General Election</h4>
+        </div>
+    </div>
+</div>
+<div class="page-container">
+    <div class="page-content-wrapper">
+        <div class="page-content-fullwidth">
+            <div class="col-md-4 col-xs-12">
+                <div class="guide-desc-header text-center">
+                    <h2>City Board of Elections</h2>
+                    <h4>You have <strong id="maxvotes">1</strong> choice remaining.</h4>
+                </div>
+                <div class="guide-desc-body" data-a11y-instructions>
+                    <h4>To vote, choose a name. You can use the mouse, or the keyboard: use the Up and Down arrows to move between candidates, press F to select the highlighted name, and K to unselect it. A check mark confirms your selection. When you are done, press J or the "Next" button to continue. Press the "Skip" button to skip. Use the "Write-In Candidate" button to add another candidate.</h4>
+                </div>
+            </div>
+            <div class="col-md-4 col-xs-12">
+                <div class="guide-desc-header text-center">
+                    <h2 id="race-title" data-a11y-heading tabindex="-1">Candidates for : Mayor</h2>
+                    <h4>Vote for No less than 0, Vote for No more than 1</h4>
+                </div>
+                <form class="guide-desc-body race-voter" method="post" action="#" style="height:60%;">
+                    <div class="form-group" role="group" aria-labelledby="race-title">
+                        <div class="form-group row" style="margin-left:25px;">
+                            <div class="md-checkbox col-md-4 col-xs-6">
+                                <input type="checkbox" id="checkbox0" name="101" value="Alex Rivera" class="md-check">
+                                <label for="checkbox0"><span></span><span class="check"></span><span class="box"></span>Alex Rivera</label>
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-left:25px;">
+                            <div class="md-checkbox col-md-4 col-xs-6">
+                                <input type="checkbox" id="checkbox1" name="102" value="Jordan Lee" class="md-check">
+                                <label for="checkbox1"><span></span><span class="check"></span><span class="box"></span>Jordan Lee</label>
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-left:25px;">
+                            <div class="md-checkbox col-md-4 col-xs-6">
+                                <input type="checkbox" id="checkbox2" name="103" value="Sam Patel" class="md-check">
+                                <label for="checkbox2"><span></span><span class="check"></span><span class="box"></span>Sam Patel</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-4 col-xs-12">
+                <div class="form-group form-md-line-input has-info col-md-5">
+                    <input type="text" class="form-control" id="form_control_1" placeholder="Other Candidate">
+                    <label for="form_control_1" class="sr-only">Write-in candidate name</label>
+                </div>
+                <div class="col-md-3 text-center">
+                    <button type="button" class="btn-voter-else" data-a11y="writein">WRITE - IN CANDIDATE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-footer-voter" style="text-align:center;padding-top:35px;color:white;">
+    <div class="col-md-3 col-xs-3"><button type="button" class="btn-voter-back" data-a11y="back">Go Back</button></div>
+    <div class="col-md-3 col-xs-3"><button type="button" class="btn-skip" data-a11y="skip">Skip</button></div>
+    <div class="col-md-3 col-xs-3"><h4>1 of 3</h4></div>
+    <div class="col-md-3 col-xs-3"><button type="button" class="btn-voter" data-a11y="next">Next</button></div>
+</div>
+
+<script src="../public/assets/jquery.min.js"></script>
+<script>
+    // Minimal stand-in for the real race.blade.php inline logic so the
+    // selection count + Next visibility behave like production.
+    var max = 1, min = 0;
+    $(function(){ ($('.md-check:checked').length < min) ? $('.btn-voter').hide() : $('.btn-voter').show(); });
+    $('.md-check').change(function(){
+        ($('.md-check:checked').length >= min) ? $('.btn-voter').show() : $('.btn-voter').hide();
+        if($('.md-check:checked').length > max){ this.checked = false; }
+        $('#maxvotes').text(max - $('.md-check:checked').length);
+    });
+    $('.btn-voter').click(function(){ alert('Next (would submit ballot step)'); });
+    $('.btn-voter-back').click(function(){ alert('Go Back'); });
+    $('.btn-skip').click(function(){ alert('Skip'); });
+    $('.btn-voter-else').click(function(){ alert('Write-in: ' + $('#form_control_1').val()); });
+</script>
+<script src="../public/assets/js/votrite-a11y.js"></script>
+</body>
+</html>

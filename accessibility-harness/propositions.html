@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--
+  Standalone accessibility test harness — Propositions screen.
+  Faithful static copy of resources/views/client/prop.blade.php using the
+  real a11y assets. Exercises the YES/NO toggle/exclusivity behaviour.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Harness — Propositions</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../public/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="../public/assets/css/components.css" rel="stylesheet" type="text/css"/>
+<link href="../public/assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
+<link href="../public/assets/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css"/>
+<link href="../public/assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../public/assets/css/votrite-a11y.css" rel="stylesheet" type="text/css"/>
+<style> body { background:#e0e5ec; } .harness-note{background:#fff8c5;padding:8px 14px;font-size:13px;border-bottom:1px solid #e3c200;} </style>
+</head>
+<body class="page-header-fixed">
+<div class="harness-note">Test harness — Propositions. Try: Tab, ↑/↓, F (select), K (deselect), S, L, J, D, Esc. Selecting YES then NO should leave only one checked.</div>
+
+<div class="page-header-voter -i navbar navbar-fixed-top" style="position:static;">
+    <div class="page-header-inner"><div class="voter-title col-md-6 col-xs-12 text-center"><h2>City Board of Elections</h2><h4>General Election</h4></div></div>
+</div>
+<div class="page-container">
+    <div class="page-content-wrapper">
+        <div class="page-content-fullwidth">
+            <div class="col-md-4 col-xs-12">
+                <div class="guide-desc-header"><h2 data-a11y-heading tabindex="-1">City Board of Elections</h2></div>
+                <div class="guide-desc-body" data-a11y-instructions>
+                    <h4>To vote, select "YES" or "NO". You can use the mouse, or the keyboard: press F to select the highlighted answer and K to clear it. When you are done, press J or the "Next" button to continue.</h4>
+                </div>
+            </div>
+            <div class="col-md-8 col-xs-12">
+                <form class="guide-desc-body race-voter" method="post" action="#" style="height:60%;">
+                    <div class="form-group">
+                        <h2>Proposition 1</h2>
+                        <h4>Shall the city issue bonds to fund park improvements?</h4>
+                        <div class="form-group row" style="margin-left:20px;" role="group" aria-label="Proposition 1">
+                            <div class="md-checkbox col-md-3">
+                                <input type="checkbox" id="checkboxyes1" name="201" value="yes" class="md-check">
+                                <label for="checkboxyes1"><span></span><span class="check"></span><span class="box"></span>YES</label>
+                            </div>
+                            <div class="md-checkbox col-md-3">
+                                <input type="checkbox" id="checkboxno1" name="201" value="no" class="md-check">
+                                <label for="checkboxno1"><span></span><span class="check"></span><span class="box"></span>NO</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-footer-voter" style="text-align:center;padding-top:35px;color:white;">
+    <div class="col-md-3 col-xs-3"><button type="button" class="btn-voter-back" data-a11y="back">Go Back</button></div>
+    <div class="col-md-3 col-xs-3"><button type="button" class="btn-skip" data-a11y="skip">Skip</button></div>
+    <div class="col-md-3 col-xs-3"><h4>2 of 3</h4></div>
+    <div class="col-md-3 col-xs-3"><button type="button" class="btn-voter" data-a11y="next">Next</button></div>
+</div>
+
+<script src="../public/assets/jquery.min.js"></script>
+<script>
+    // Mirror of prop.blade.php inline logic (single answer per proposition).
+    var precheck = null;
+    $('input.md-check').change(function(e){
+        $(e.target).parent().parent().find('.md-check').not(this).prop('checked', false);
+        if($(this).attr('id') == precheck && !this.checked){ precheck = null; }
+        else { precheck = $(this).attr('id'); }
+    });
+    $('.btn-voter').click(function(){ alert('Next'); });
+    $('.btn-voter-back').click(function(){ alert('Go Back'); });
+    $('.btn-skip').click(function(){ alert('Skip'); });
+</script>
+<script src="../public/assets/js/votrite-a11y.js"></script>
+</body>
+</html>

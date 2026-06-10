@@ -1,0 +1,14 @@
+{
+  "name": "votrite-a11y-harness",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Automated axe-core accessibility checks for the VotRite keyboard-first voter screens.",
+  "type": "module",
+  "scripts": {
+    "test:a11y": "node axe-test.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/puppeteer": "^4.10.0",
+    "puppeteer-core": "^23.0.0"
+  }
+}

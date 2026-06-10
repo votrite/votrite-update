@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!--
+  Standalone accessibility test harness — Review screen.
+  Confirms the former <h4 onclick> "edit contest" links are now real,
+  focusable, keyboard-activatable buttons, and that Go Back / Cast map
+  correctly to the D/Esc and J keys.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Harness — Review</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../public/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="../public/assets/css/components.css" rel="stylesheet" type="text/css"/>
+<link href="../public/assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
+<link href="../public/assets/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css"/>
+<link href="../public/assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../public/assets/css/votrite-a11y.css" rel="stylesheet" type="text/css"/>
+<style> body { background:#e0e5ec; } .harness-note{background:#fff8c5;padding:8px 14px;font-size:13px;border-bottom:1px solid #e3c200;} </style>
+</head>
+<body class="page-header-fixed">
+<div class="harness-note">Test harness — Review. Tab to each "edit contest" link (now a button) and press Enter/F. J/→ = Cast, D/←/Esc = Go Back. Press S to read selections.</div>
+
+<div class="page-header-voter -i navbar navbar-fixed-top" style="position:static;">
+    <div class="page-header-inner"><div class="voter-title col-md-6 col-xs-12 text-center"><h2>City Board of Elections</h2><h4>General Election</h4></div></div>
+</div>
+<div class="page-container">
+    <div class="page-content-wrapper">
+        <div class="page-content-fullwidth">
+            <div class="col-md-4 col-xs-12">
+                <div class="guide-desc-header"><h2>City Board of Elections</h2></div>
+                <div class="guide-desc-body" data-a11y-instructions>
+                    <h4>Review each selection. When done, press J or "Cast my vote". To change a selection, move to a contest name and press Enter or F. Press S to hear your selections.</h4>
+                </div>
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <div class="guide-desc-header"><h2 data-a11y-heading tabindex="-1">Review your choices.</h2></div>
+                <form class="guide-desc-body race-voter scroller" method="post" action="#">
+                    <div class="form-group row" style="margin-left:25px;">
+                        <h3>Candidates</h3>
+                        <div style="margin-left:10px;"><h4><button type="button" class="a11y-linkbtn" onclick="alert('edit Mayor')" aria-label="Edit contest: Mayor">Candidates For: Mayor.</button></h4></div>
+                        <div class="form-group row" style="margin-left:25px;">
+                            <div class="md-checkbox col-md-3">
+                                <input type="checkbox" id="r0" name="r0" value="Alex Rivera" class="md-check" checked disabled>
+                                <label for="r0"><span></span><span class="check"></span><span class="box"></span>Alex Rivera</label>
+                            </div>
+                        </div>
+                        <div style="margin-left:10px;"><h4><button type="button" class="a11y-linkbtn" onclick="alert('edit Prop 1')" aria-label="Edit proposition: Proposition 1">Proposition 1</button></h4></div>
+                        <div class="form-group row" style="margin-left:10px;"><div class="col-md-3"><h4>Park bonds</h4></div><div class="col-md-3"><h4>yes</h4></div></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-footer-voter" style="text-align:center;padding-top:35px;color:white;">
+    <div class="col-md-3 col-xs-3"><button type="button" class="btn-review" data-a11y="back" onclick="alert('Go Back')">Go Back</button></div>
+    <div class="col-md-3 col-xs-3"><button type="button" class="btn-voter-back" onclick="alert('Cancel Ballot')">Cancel Ballot</button></div>
+    <div class="col-md-3 col-xs-3"></div>
+    <div class="col-md-3 col-xs-3"><button type="button" class="btn-voter" data-a11y="next" onclick="alert('Cast my vote')">Cast my vote</button></div>
+</div>
+
+<script src="../public/assets/jquery.min.js"></script>
+<script src="../public/assets/js/votrite-a11y.js"></script>
+</body>
+</html>

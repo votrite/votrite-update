@@ -1,0 +1,249 @@
+/* =====================================================================
+   VotRite – Keyboard-first accessibility layer
+   ---------------------------------------------------------------------
+   Loaded on every voter-facing screen (client layout). Mouse/touch use
+   is unchanged; this only ADDS keyboard reachability, visible focus,
+   adequate touch targets and screen-reader affordances.
+   WCAG 2.1.1 Keyboard, 2.4.7 Focus Visible, 4.1.2 Name/Role/Value.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. Re-enable keyboard focus on the custom checkboxes / radios.
+
+   The base theme (components.css) hides the real <input> with
+   `visibility:hidden`, which also drops it out of the Tab order, so
+   keyboard and screen-reader voters could not reach any choice. We make
+   the input invisible but still focusable/operable, and sit it on top of
+   the styled box so a click still lands on the input.
+   --------------------------------------------------------------------- */
+.md-checkbox input[type=checkbox],
+.md-radio input[type=radio] {
+    visibility: visible;          /* restore keyboard focusability */
+    opacity: 0;                   /* keep it visually hidden        */
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 26px;
+    height: 26px;
+    margin: 0;
+    z-index: 6;                   /* above the decorative .box      */
+    cursor: pointer;
+}
+
+/* Visible focus indicator drawn on the decorative box of the focused
+   option (the input itself is transparent). */
+.md-checkbox input[type=checkbox]:focus ~ label > .box,
+.md-radio input[type=radio]:focus ~ label > .box {
+    outline: 3px solid #1a5fb4;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #1a5fb4;
+}
+
+/* Highlight the whole option row while its control is focused so
+   low-vision voters can see where they are. */
+.md-checkbox:focus-within,
+.md-radio:focus-within {
+    background: #eaf1fb;
+    border-radius: 6px;
+}
+
+/* ---------------------------------------------------------------------
+   2. Strong, consistent focus ring for every other interactive control.
+   --------------------------------------------------------------------- */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+[tabindex]:focus,
+.btn-voter:focus,
+.btn-voter-back:focus,
+.btn-skip:focus,
+.btn-review:focus,
+.btn-voter-else:focus {
+    outline: 3px solid #1a5fb4 !important;
+    outline-offset: 2px !important;
+}
+
+/* Programmatic focus targets (headings we move focus to on load) must
+   not show a distracting ring but should still be reachable. */
+[data-a11y-heading]:focus {
+    outline: 2px dashed #1a5fb4;
+    outline-offset: 4px;
+}
+
+/* ---------------------------------------------------------------------
+   3. Adequate touch / click targets (~44px) for motor-impaired voters.
+   --------------------------------------------------------------------- */
+.btn-voter,
+.btn-voter-back,
+.btn-skip,
+.btn-review,
+.btn-voter-else,
+.spinner-buttons .btn {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+.md-checkbox label,
+.md-radio label {
+    display: inline-block;
+    min-height: 28px;
+    line-height: 24px;
+}
+
+/* Link-styled button: used on the Review page so "edit this contest"
+   is a real, focusable, keyboard-activatable control while still looking
+   like the original text link. */
+.a11y-linkbtn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.a11y-linkbtn:hover {
+    color: #1a5fb4;
+}
+
+/* ---------------------------------------------------------------------
+   4. Screen-reader-only utility + skip link.
+   --------------------------------------------------------------------- */
+.sr-only {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.a11y-skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 10000;
+    padding: 10px 16px;
+    background: #1a5fb4;
+    color: #fff;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 0 0 6px 0;
+}
+.a11y-skip-link:focus {
+    left: 0;
+}
+
+/* ---------------------------------------------------------------------
+   5. Keyboard-help overlay (toggled with H or ?).
+   --------------------------------------------------------------------- */
+.a11y-help-hint {
+    position: fixed;
+    right: 12px;
+    bottom: 12px;
+    z-index: 9998;
+    background: #1a5fb4;
+    color: #fff;
+    border: none;
+    border-radius: 22px;
+    padding: 10px 16px;
+    font-size: 14px;
+    min-height: 44px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .3);
+}
+
+.a11y-help-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, .55);
+}
+.a11y-help-overlay.is-open {
+    display: flex;
+}
+
+.a11y-help-dialog {
+    background: #fff;
+    color: #222;
+    width: min(560px, 92vw);
+    max-height: 86vh;
+    overflow: auto;
+    border-radius: 10px;
+    padding: 24px 28px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, .4);
+}
+.a11y-help-dialog h2 {
+    margin-top: 0;
+    font-size: 22px;
+    color: #1a5fb4;
+}
+.a11y-help-dialog table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0 18px;
+}
+.a11y-help-dialog th,
+.a11y-help-dialog td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid #e3e3e3;
+    font-size: 16px;
+    vertical-align: top;
+}
+.a11y-help-dialog kbd {
+    display: inline-block;
+    min-width: 22px;
+    text-align: center;
+    padding: 2px 8px;
+    border: 1px solid #b5b5b5;
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    background: #f4f4f4;
+    font-family: monospace;
+    font-size: 14px;
+}
+.a11y-help-close {
+    min-height: 44px;
+    min-width: 120px;
+    padding: 8px 18px;
+    background: #1a5fb4;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* ---------------------------------------------------------------------
+   6. Colour contrast (WCAG 1.4.3, AA).
+
+   The brand purple #7864f7 carrying white text measured 4.22:1, just
+   below the 4.5:1 threshold for normal text (header subtitle, footer
+   pager, footer buttons, the mobile Write-In button). We darken only the
+   voter header/footer surfaces to #6c5ade, which yields ~5.05:1 with white
+   and stays visually the same brand purple. Scoped to voter chrome and
+   kept here (not in the theme files) so it ships and rolls back with the
+   rest of the keyboard-navigation layer.
+   --------------------------------------------------------------------- */
+.page-header-voter.navbar {
+    background: #6c5ade !important;
+}
+.page-footer-voter {
+    background: #6c5ade !important;
+}
+/* Write-In button carries white text on the brand purple at every width
+   (base rule in layout.css and the <=1000px rule in components.css). */
+.btn-voter-else {
+    background-color: #6c5ade !important;
+}
